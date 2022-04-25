@@ -1,5 +1,26 @@
 ;;; defun-pattern.el --- A way to define methods that have multiple pattern-style arglists and bodies.
 
+;; Copyright (c) 2022  Free Software Foundation, Inc.
+
+;; Author: Andrew Hyatt <ahyatt@gmail.com>
+;; Homepage: https://github.com/ahyatt/defun-pattern
+;; Keywords: Pattern, Matching 
+;; Version: 0.1
+;; Package-Requires: ((cl-lib "0.5"))
+;;
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation; either version 2 of the
+;; License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful, but
+;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.
+
 ;;; Commentary:
 ;; This code provides a way to have a defun that, instead of having a single
 ;; arglist, has many, which are pattern-matched against. Each arglist then has
@@ -10,7 +31,7 @@
 ;;
 ;; For usage, see `defun-pattern' documentation.
 ;;
-;; CAUTION: as of now, there is no ability to edebug the defun.
+;; 
 
 ;;; Code:
 
@@ -132,8 +153,6 @@ Using the special arglist of (&rest _), this becomes:
 However, arguments passed in can be used in body methods, and it
 is often useful to have real arguments so that documentation and
 other standard elisp tools can function well.
-
-
 
 Further examples can be found in the file defun-pattern-test.el.
 "

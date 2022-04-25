@@ -1,0 +1,32 @@
+#+title: defun-pattern - Functions that work via pattern-matching
+#+author: Andrew Hyatt
+#+language: en
+
+* Introduction
+This library provides only one thing, the =defun-pattern= macro.  This macro is designed to create functions that work by pattern matching its arguments.  This is useful when the function can operate in several different ways depending on the various patterns of arguments.
+
+The best way to think of =defun-pattern= is to think of it as a function with one main arglist, mostly used for documentation, and several combination patterns and arglists that are matched against, causing the corresponding body to execute.
+
+The best way to illustrate this is with an example:
+
+#+begin_src emacs-lisp
+(defun-pattern fibonacci (n)
+  "Compute the fibonacci sequence."
+  ((0) 0)
+  ((1) 1)
+  ((n)
+   (+ (fibonacci (- n 1))
+      (fibonacci (- n 2)))))
+#+end_src
+
+The main arglist here specifies =n=, which isn't actually used in the function, it's just purely for documentation.  The rest of the clauses contain the pattern-and-arglist, along with the body.  The first pattern-and-arglist (hereafter just called pattern) is =(0)=, which doesn't have a variable, just a constant to match against.  If =(fibonacci 0)= is called, it will match against the =(0)= arglist and execute the corresponding body (in this case, just returning zero).  =(1)= operates the same way.  =(n)= is an pattern with an actual argument, =n=.  It is this =n= which the corresponding body statement uses, not the main arglist n.  Because of this, the main arglist could be anything, it doesn't have to match this.  However, the main arglist one does do something; it would be used if it wasn't re-used in the pattern.
+* The special arglist =(&rest _)=
+Patterns can be of any length, so it is useful to pass in parameters with =&rest=.  However, normally, this macro follows the normal rules of elisp, and the argument after =&rest= will be used in the defun as a list.  Therefore, the pattern has to be a list as well.  For example, if the arglist was =(a &rest args)=, you could have a pattern of =(a (b c d))=.  But what happens if you just want to allow all arguments?  For that, we have a special arglist =(&rest _​_)=.  That arglist (and only that exact arglist) will allow any number of arguments, and the patter-and-arglists don't have to treat it as a list.  Therefore, you can match anything against it.  In the =fibonacci= example above, it would work equally well, with an unchanged body, if the arglist was =(&rest ​_​)=.
+* Patterns
+Patterns are, under the hood, destructured pcase patterns, except quoting has been altered to look more like a normal arglist.  The follow are examples of valid patterens:
+- =(a)= matches against anything, binds to variable =a=.
+- =('a)= matches against the symbol =a=.
+- =((pred cl-evenp) (pred cl-oddp))= matches an even number followed by an odd number.
+- =(a a)= matches the same argument, repeated twice.
+* Caution
+This library is alpha quality.  While it is tested, it hasn't received sufficient use yet to instill confidence.  Once it has been vetted sufficiently, the version will go to 1.0.
