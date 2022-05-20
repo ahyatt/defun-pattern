@@ -45,7 +45,7 @@ Otherwise, if it isn't inserted, return ELEM."
     ((and (pred listp)
          ls
          (guard (= 2 (length ls)))
-         (guard (equal 'quote (car ls)))) (cadr ls))
+         (guard (equal 'quote (car ls)))) (bare-symbol ls))
     (e e)))
 
 (defconst defun-pattern-known-funcs
